@@ -3,7 +3,6 @@ from collections import defaultdict
 import itertools
 
 class Producao:
-    """Representa uma produção da gramática, como 'A -> aB'."""
     def __init__(self, esquerda, direita):
         self.esquerda = esquerda.strip()
         self.direita = direita.strip()
@@ -23,7 +22,6 @@ class Producao:
         return hash((self.esquerda, self.direita))
 
 class Gramatica:
-    """Representa uma gramática livre de contexto."""
     def __init__(self):
         self.variaveis = set()
         self.terminais = set()
@@ -31,7 +29,6 @@ class Gramatica:
         self.simbolo_inicial = "S" 
 
     def adicionarProducao(self, esquerda, direita):
-        """Adiciona uma nova produção e atualiza os conjuntos de símbolos."""
         if not self.producoes:
             self.simbolo_inicial = esquerda
 
@@ -45,7 +42,6 @@ class Gramatica:
         self.producoes.append(Producao(esquerda, direita))
 
     def imprimir(self):
-        """Exibe a gramática de forma legível."""
         print(f"Variáveis: {sorted(list(self.variaveis))}")
         print(f"Terminais: {sorted(list(self.terminais))}")
         print("Produções:")
@@ -54,7 +50,6 @@ class Gramatica:
         print(f"Símbolo Inicial: {self.simbolo_inicial}")
 
     def gerarNovaVariavel(self, prefixo='V'):
-      """Gera um nome de variável único que não existe na gramática."""
       contador = 1
       while True:
           nova_var = f"{prefixo}{contador}"
@@ -64,8 +59,6 @@ class Gramatica:
           contador += 1
 
 class Simplificacao:
-    """Agrupa os algoritmos de simplificação da gramática."""
-
     @staticmethod
     def removerSimbolosInuteis(gramatica):
         geradoras = set()
@@ -157,8 +150,6 @@ class Simplificacao:
             gramatica.producoes = [p for p in gramatica.producoes if p not in removidas] + novas_producoes
 
 class Melhorias:
-    """Agrupa algoritmos de melhoria como fatoração e remoção de recursão."""
-
     @staticmethod
     def removerRecursaoEsquerda(gramatica):
         variaveis = sorted(list(gramatica.variaveis))
@@ -247,11 +238,8 @@ class Melhorias:
                     break 
 
 class FormasNormais:
-    """Agrupa os algoritmos de conversão para formas normais."""
-
     @staticmethod
     def paraChomsky(gramatica):
-        """Converte a gramática para a Forma Normal de Chomsky."""
         Simplificacao.removerProducoesVazias(gramatica)
         Simplificacao.substituirVariaveisUnitarias(gramatica)
         Simplificacao.removerSimbolosInuteis(gramatica)
@@ -302,7 +290,6 @@ class FormasNormais:
 
     @staticmethod
     def paraGreibach(gramatica):
-        """Converte a gramática para a Forma Normal de Greibach."""
         FormasNormais.paraChomsky(gramatica)
         Melhorias.removerRecursaoEsquerda(gramatica)
         Simplificacao.removerProducoesVazias(gramatica)
@@ -332,7 +319,6 @@ class FormasNormais:
             gramatica.producoes = novas_producoes
 
 def main():
-    """Função principal que orquestra a execução do programa."""
     gramatica = Gramatica()
 
     print("Digite as produções da gramática (ex: S -> aAb | c). Deixe uma linha vazia para encerrar:")
